@@ -1,0 +1,9 @@
+{
+  "name": "storm-editor",
+  "version": "1.0.0",
+  "description": "AI-powered code editor with Gemini and DeepSeek integration",
+  "main": "app.js",
+  "dependencies": {
+    "@huggingface/inference": "^2.6.4"
+  }
+}
