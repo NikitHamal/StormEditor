@@ -5,24 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Storm Editor - AI-Powered Code Editor</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Monaco Editor CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.js"></script>
 </head>
 <body>
     <div class="container">
+        <div class="editor-container">
+            <div id="monaco-editor"></div>
+        </div>
         <div class="chat-container">
             <div class="model-selector-container">
                 <select id="model-selector" class="model-dropdown">
                     <option value="gemini">Gemini 2.0 Flash</option>
-                    <option value="claude">Claude 3.5 Sonnet</option>
-                    <option value="palm">PaLM 2 Codechat</option>
                     <option value="deepseek">DeepSeek R1 Distill</option>
                     <option value="paxsenixFluxPro">Flux Pro (Paxsenix)</option>
+                    <option value="qwen">Qwen</option>
+                    <option value="phi">Phi</option>
                 </select>
                 <div class="api-key-container">
                     <input type="password" id="api-key-input" placeholder="Enter API Key" class="api-key-input">
                     <button id="save-key" class="save-key-btn">Save Key</button>
                 </div>
                 <div class="api-info">
-                    <p>Note: Claude, PaLM 2, and DeepSeek use OpenRouter API. Get your key from <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai</a></p>
+                    <p>Note: DeepSeek use OpenRouter API. Get your key from <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai</a></p>
                 </div>
             </div>
             <div class="chat-messages" id="chat-messages"></div>
@@ -30,8 +35,19 @@
                 <textarea id="chat-input" placeholder="Ask me anything about your code..."></textarea>
                 <button id="send-button">Send</button>
             </div>
+
         </div>
+
     </div>
+<!-- Added editor header and file name input -->
+<div class="editor-container">
+    <div class="editor-header">
+        <span class="editor-language">JavaScript</span>
+        <input type="text" placeholder="File name..." class="file-name-input">
+    </div>
+    <div id="monaco-editor"></div>
+</div>
+
     <script src="app.js"></script>
 </body>
 </html>
