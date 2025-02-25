@@ -16,12 +16,57 @@
 </head>
 <body>
     <div class="container">
+        <!-- File Explorer Sidebar -->
+        <div class="file-explorer">
+            <div class="explorer-header">
+                <span>EXPLORER</span>
+                <div class="explorer-actions">
+                    <button id="new-file-btn" class="explorer-action-btn" title="New File">
+                        <i class="fas fa-file-plus"></i>
+                    </button>
+                    <button id="new-folder-btn" class="explorer-action-btn" title="New Folder">
+                        <i class="fas fa-folder-plus"></i>
+                    </button>
+                    <button id="upload-file-btn" class="explorer-action-btn" title="Upload File">
+                        <i class="fas fa-upload"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="file-tree" id="file-tree">
+                <!-- File tree will be populated here -->
+                <div class="empty-explorer-message">No files yet. Create or upload a file to get started.</div>
+            </div>
+        </div>
+
         <div class="editor-container">
+            <!-- Tabs for multiple files -->
+            <div class="editor-tabs">
+                <div class="tabs-container" id="editor-tabs-container">
+                    <!-- Tabs will be added here -->
+                </div>
+                <div class="tabs-actions">
+                    <button id="add-tab-btn" class="tab-action-btn" title="New File">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+            </div>
+            
             <div class="editor-header">
-                <span class="editor-language">JavaScript</span>
+                <div class="language-selector">
+                    <span class="editor-language">HTML</span>
+                    <select id="editor-language-selector" class="language-dropdown">
+                        <!-- Options will be populated from JavaScript -->
+                    </select>
+                </div>
                 <div class="editor-actions">
-                    <button id="toggle-sidebar" class="action-btn" title="Toggle Sidebar">
-                        <i class="fas fa-bars"></i>
+                    <button id="preview-code" class="action-btn" title="Preview Code">
+                        <i class="fas fa-play"></i>
+                    </button>
+                    <button id="save-file" class="action-btn" title="Save File">
+                        <i class="fas fa-save"></i>
+                    </button>
+                    <button id="toggle-sidebar" class="action-btn" title="Toggle Chat">
+                        <i class="fas fa-comments"></i>
                     </button>
                     <button id="toggle-settings" class="action-btn" title="Settings">
                         <i class="fas fa-cog"></i>
@@ -114,5 +159,6 @@
         </div>
     </div>
     <script src="app.js"></script>
+    <script src="keyboard-shortcuts.js"></script>
 </body>
 </html>
