@@ -5,49 +5,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Storm Editor - AI-Powered Code Editor</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts - Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- W3 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <!-- Monaco Editor CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="editor-container">
+            <div class="editor-header">
+                <span class="editor-language">JavaScript</span>
+                <div class="editor-actions">
+                    <button id="toggle-sidebar" class="action-btn" title="Toggle Sidebar">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <button id="toggle-settings" class="action-btn" title="Settings">
+                        <i class="fas fa-cog"></i>
+                    </button>
+                </div>
+            </div>
             <div id="monaco-editor"></div>
         </div>
-        <div class="chat-container">
-            <div class="model-selector-container">
-                <select id="model-selector" class="model-dropdown">
-                    <option value="gemini">Gemini 2.0 Flash</option>
-                    <option value="deepseek">DeepSeek R1 Distill</option>
-                    <option value="paxsenixFluxPro">Flux Pro (Paxsenix)</option>
-                    <option value="qwen">Qwen</option>
-                    <option value="phi">Phi</option>
-                </select>
-                <div class="api-key-container">
-                    <input type="password" id="api-key-input" placeholder="Enter API Key" class="api-key-input">
-                    <button id="save-key" class="save-key-btn">Save Key</button>
+        <div class="chat-container" id="sidebar">
+            <div class="sidebar-toolbar">
+                <button id="chat-tab" class="tab-btn active">
+                    <i class="fas fa-comments"></i> Chat
+                </button>
+                <button id="settings-tab" class="tab-btn">
+                    <i class="fas fa-cog"></i> Settings
+                </button>
+            </div>
+            <div id="settings-panel" class="settings-panel hidden">
+                <h3>Settings</h3>
+                <div class="setting-item">
+                    <label>AI Model:</label>
+                    <select id="model-selector" class="model-dropdown">
+                        <option value="gemini">Gemini 2.0 Flash</option>
+                        <option value="openrouter">OpenRouter API</option>
+                        <option value="paxsenixFluxPro">Flux Pro (Paxsenix)</option>
+                        <option value="phi">Phi (Paxsenix)</option>
+                    </select>
                 </div>
-                <div class="api-info">
-                    <p>Note: DeepSeek use OpenRouter API. Get your key from <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai</a></p>
+                <div class="setting-item">
+                    <label>Sidebar Width:</label>
+                    <input type="range" id="sidebar-width" min="250" max="600" value="300">
+                </div>
+                
+                <h3>API Keys</h3>
+                <div class="api-keys-container">
+                    <div class="api-key-item">
+                        <label for="gemini-key">Gemini API Key:</label>
+                        <div class="api-key-input-group">
+                            <input type="password" id="gemini-key" class="api-key-input" placeholder="Enter Gemini API key">
+                            <button class="toggle-visibility-btn" data-for="gemini-key">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="api-key-item">
+                        <label for="openrouter-key">OpenRouter API Key:</label>
+                        <div class="api-key-input-group">
+                            <input type="password" id="openrouter-key" class="api-key-input" placeholder="Enter OpenRouter API key">
+                            <button class="toggle-visibility-btn" data-for="openrouter-key">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="api-key-item">
+                        <label for="openrouter-model">OpenRouter Model ID:</label>
+                        <select id="openrouter-model" class="model-dropdown">
+                            <option value="anthropic/claude-3-5-sonnet">Claude 3.5 Sonnet</option>
+                            <option value="anthropic/claude-3-opus">Claude 3 Opus</option>
+                            <option value="google/gemini-1.5-pro">Gemini 1.5 Pro</option>
+                            <option value="google/gemini-1.5-flash">Gemini 1.5 Flash</option>
+                            <option value="meta-llama/llama-3-70b-instruct">Llama 3 70B</option>
+                            <option value="mistralai/mixtral-8x7b-instruct">Mixtral 8x7B</option>
+                        </select>
+                    </div>
+                    <button id="save-api-keys" class="save-keys-btn">Save API Keys</button>
                 </div>
             </div>
-            <div class="chat-messages" id="chat-messages"></div>
-            <div class="chat-input-container">
-                <textarea id="chat-input" placeholder="Ask me anything about your code..."></textarea>
-                <button id="send-button">Send</button>
+            <div id="chat-panel">
+                <div class="chat-selector">
+                    <div class="chat-history-header">
+                        <span>Chat History</span>
+                        <button id="new-chat-btn" class="action-btn" title="New Chat">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    <div id="chat-history-list" class="chat-history-list">
+                        <!-- Chat history items will be added here -->
+                    </div>
+                </div>
+                <div class="active-chat">
+                    <div class="chat-messages" id="chat-messages"></div>
+                    <div class="chat-input-container">
+                        <textarea id="chat-input" placeholder="Ask me anything about your code..."></textarea>
+                        <button id="send-button">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
             </div>
-
         </div>
-
     </div>
-<!-- Added editor header and file name input -->
-<div class="editor-container">
-    <div class="editor-header">
-        <span class="editor-language">JavaScript</span>
-        <input type="text" placeholder="File name..." class="file-name-input">
-    </div>
-    <div id="monaco-editor"></div>
-</div>
-
     <script src="app.js"></script>
 </body>
 </html>

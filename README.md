@@ -5,7 +5,7 @@ A modern, AI-powered code editor built with Monaco Editor and Gemini 1.5 Pro. Fe
 ## Features
 
 - Monaco Editor integration for powerful code editing
-- Context-aware AI assistance powered by Gemini 1.5 Pro
+- Context-aware AI assistance powered by Gemini 1.5 Pro and other models thanks to Alex for providing the Paxsenix API.
 - Modern, responsive UI with split-pane layout
 - Real-time AI code suggestions and explanations
 - Dark theme optimized for long coding sessions
