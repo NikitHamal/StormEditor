@@ -246,10 +246,16 @@ function loadApiKeys() {
                 
                 if (input.type === 'password') {
                     input.type = 'text';
-                    btn.innerHTML = '<i class="fas fa-eye-slash"></i>';
-                } else {
+                    const icon = btn.querySelector('i');
+                    if (icon) {
+                        icon.className = 'fas fa-eye-slash';
+                    }
+                } else if (input) {
                     input.type = 'password';
-                    btn.innerHTML = '<i class="fas fa-eye"></i>';
+                    const icon = btn.querySelector('i');
+                    if (icon) {
+                        icon.className = 'fas fa-eye';
+                    }
                 }
             });
         });
@@ -358,60 +364,99 @@ const sendButton = document.getElementById('send-button');
 const modelSelector = document.getElementById('model-selector');
 
 // Sidebar and Settings Controls
-document.getElementById('toggle-sidebar').addEventListener('click', () => {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.classList.toggle('hidden');
-});
+const toggleSidebar = document.getElementById('toggle-sidebar');
+if (toggleSidebar) {
+    toggleSidebar.addEventListener('click', () => {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('hidden');
+    });
+}
 
 // Tab switching functionality
-document.getElementById('chat-tab').addEventListener('click', () => {
-    document.getElementById('chat-tab').classList.add('active');
-    document.getElementById('settings-tab').classList.remove('active');
-    document.getElementById('chat-panel').style.display = 'flex';
-    document.getElementById('settings-panel').classList.add('hidden');
-});
+const chatTab = document.getElementById('chat-tab');
+if (chatTab) {
+    chatTab.addEventListener('click', () => {
+        document.getElementById('chat-tab').classList.add('active');
+        document.getElementById('settings-tab').classList.remove('active');
+        document.getElementById('chat-panel').style.display = 'flex';
+        document.getElementById('settings-panel').classList.add('hidden');
+    });
+}
 
-document.getElementById('settings-tab').addEventListener('click', () => {
-    document.getElementById('settings-tab').classList.add('active');
-    document.getElementById('chat-tab').classList.remove('active');
-    document.getElementById('chat-panel').style.display = 'none';
-    document.getElementById('settings-panel').classList.remove('hidden');
-});
+const settingsTab = document.getElementById('settings-tab');
+if (settingsTab) {
+    settingsTab.addEventListener('click', () => {
+        document.getElementById('settings-tab').classList.add('active');
+        document.getElementById('chat-tab').classList.remove('active');
+        document.getElementById('chat-panel').style.display = 'none';
+        document.getElementById('settings-panel').classList.remove('hidden');
+    });
+}
 
-document.getElementById('toggle-settings').addEventListener('click', () => {
-    // Switch to settings tab when settings button is clicked
-    document.getElementById('settings-tab').click();
-});
-
-document.getElementById('sidebar-width').addEventListener('input', (e) => {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.style.width = e.target.value + 'px';
-});
-
-// Create new chat button
-document.getElementById('new-chat-btn').addEventListener('click', createNewChat);
-
-// Password visibility toggle
-document.querySelectorAll('.toggle-visibility-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        const inputId = btn.getAttribute('data-for');
-        const input = document.getElementById(inputId);
-        
-        if (input.type === 'password') {
-            input.type = 'text';
-            btn.querySelector('i').className = 'fas fa-eye-slash';
-        } else {
-            input.type = 'password';
-            btn.querySelector('i').className = 'fas fa-eye';
+const toggleSettings = document.getElementById('toggle-settings');
+if (toggleSettings) {
+    toggleSettings.addEventListener('click', () => {
+        // Switch to settings tab when settings button is clicked
+        const settingsTab = document.getElementById('settings-tab');
+        if (settingsTab) {
+            settingsTab.click();
         }
     });
-});
+}
+
+const sidebarWidth = document.getElementById('sidebar-width');
+if (sidebarWidth) {
+    sidebarWidth.addEventListener('input', (e) => {
+        const sidebar = document.getElementById('sidebar');
+        if (sidebar) {
+            sidebar.style.width = e.target.value + 'px';
+        }
+    });
+}
+
+// Create new chat button
+const newChatBtn = document.getElementById('new-chat-btn');
+if (newChatBtn) {
+    newChatBtn.addEventListener('click', createNewChat);
+}
+
+// Password visibility toggle
+const toggleVisibilityBtns = document.querySelectorAll('.toggle-visibility-btn');
+if (toggleVisibilityBtns.length > 0) {
+    toggleVisibilityBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const inputId = btn.getAttribute('data-for');
+            const input = document.getElementById(inputId);
+            
+            if (input) {
+                if (input.type === 'password') {
+                    input.type = 'text';
+                    const icon = btn.querySelector('i');
+                    if (icon) {
+                        icon.className = 'fas fa-eye-slash';
+                    }
+                } else {
+                    input.type = 'password';
+                    const icon = btn.querySelector('i');
+                    if (icon) {
+                        icon.className = 'fas fa-eye';
+                    }
+                }
+            }
+        });
+    });
+}
 
 // Save API keys button
-document.getElementById('save-api-keys').addEventListener('click', saveApiKeys);
+const saveApiKeysBtn = document.getElementById('save-api-keys');
+if (saveApiKeysBtn) {
+    saveApiKeysBtn.addEventListener('click', saveApiKeys);
+}
 
 // Add model selector change event to save selected model
-modelSelector.addEventListener('change', saveSelectedModel);
+if (modelSelector) {
+    modelSelector.addEventListener('change', saveSelectedModel);
+}
 
 // Gemini conversation history
 const geminiConversationHistory = [];

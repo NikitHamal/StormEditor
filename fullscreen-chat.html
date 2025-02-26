@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Storm Chat - AI Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts - Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- W3 Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        /* Fullscreen chat specific styles */
+        body {
+            overflow: auto;
+            background-color: #1e1e1e;
+        }
+        
+        .fullscreen-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0;
+        }
+        
+        .fullscreen-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: #252526;
+            border-bottom: 1px solid #333;
+        }
+        
+        .fullscreen-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .fullscreen-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        
+        .fullscreen-btn {
+            background: none;
+            border: none;
+            color: #ccc;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .fullscreen-btn:hover {
+            background-color: #3c3c3c;
+            color: #fff;
+        }
+        
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            background-color: #1e1e1e;
+            border: none;
+            height: calc(100vh - 67px); /* Account for header height */
+        }
+        
+        .chat-sidebar {
+            width: 280px;
+            background-color: #252526;
+            border-right: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 10;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .chat-sidebar.visible {
+            transform: translateX(0);
+        }
+        
+        .chat-history-header {
+            padding: 15px;
+            font-size: 14px;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+        }
+        
+        .chat-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            min-height: 0; /* Important for proper flex behavior */
+        }
+        
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            min-height: 0; /* Important for proper flex behavior */
+        }
+        
+        .chat-input-container {
+            padding: 15px 20px;
+            display: flex;
+            gap: 10px;
+            background-color: #252526;
+            border-top: 1px solid #333;
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
+        }
+        
+        #chat-input {
+            flex: 1;
+            min-height: 50px;
+            max-height: 150px;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background-color: #2d2d2d;
+            color: #fff;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            resize: none;
+            outline: none;
+        }
+        
+        #send-button {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            border: none;
+            background-color: #0078d4;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        #send-button:hover {
+            background-color: #0086f0;
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .fullscreen-container {
+                padding: 0;
+            }
+            
+            .fullscreen-header {
+                padding: 10px 15px;
+            }
+            
+            .fullscreen-title {
+                font-size: 1rem;
+            }
+            
+            .chat-messages {
+                padding: 15px;
+            }
+            
+            .chat-input-container {
+                padding: 10px 15px;
+            }
+            
+            #chat-input {
+                min-height: 44px;
+                padding: 10px 12px;
+            }
+            
+            #send-button {
+                width: 44px;
+                height: 44px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="fullscreen-container">
+        <div class="fullscreen-header">
+            <div class="fullscreen-title">
+                <i class="fas fa-robot"></i> Storm Chat
+            </div>
+            <div class="fullscreen-actions">
+                <button id="toggle-history-btn" class="fullscreen-btn" title="Toggle Chat History">
+                    <i class="fas fa-history"></i>
+                </button>
+                <button id="new-chat-btn" class="fullscreen-btn" title="New Chat">
+                    <i class="fas fa-plus"></i>
+                </button>
+                <button id="back-to-editor-btn" class="fullscreen-btn" title="Back to Editor">
+                    <i class="fas fa-code"></i>
+                </button>
+            </div>
+        </div>
+        
+        <div class="chat-container">
+            <div class="chat-sidebar" id="chat-sidebar">
+                <div class="chat-history-header">
+                    <span>Chat History</span>
+                    <button id="close-sidebar-btn" class="fullscreen-btn" title="Close Sidebar">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="chat-history-list" class="chat-history-list">
+                    <!-- Chat history items will be added here -->
+                </div>
+            </div>
+            
+            <div class="chat-main">
+                <div class="chat-messages" id="chat-messages">
+                    <!-- Chat messages will be displayed here -->
+                </div>
+                <div class="chat-input-container">
+                    <textarea id="chat-input" placeholder="Ask me anything..."></textarea>
+                    <button id="send-button">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="fullscreen-chat.js"></script>
+</body>
+</html> 
